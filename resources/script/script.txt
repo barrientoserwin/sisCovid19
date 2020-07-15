@@ -1,0 +1,219 @@
+//Paquetes para trabajar Frond End Vue 
+composer require laravel/ui
+php artisan ui vue --auth
+npm install 
+npm run dev
+npm watch
+
+//Paquete de busqueda automatica
+npm install vue-select
+
+//GitHub
+git add .
+git commit -m "actualizado login"
+git push //subir
+git pull //bajar
+git reset --hard //descartar el ultimo cambio
+rm -rf .git 
+
+//Manejo de fechas 
+npm install moment
+moment().format('YYYY-MM-DD') ...para vue //https://momentjs.com/docs/
+
+//Manejo de Request 
+// $hospital->nombre=$request->get('nombre');
+// $hospital->telefono=$request->get('telefono');
+
+//Comando para las migraciones
+php artisan make:migration create_zona_table --create=zona
+php artisan make:migration create_paciente_table --create=paciente
+php artisan make:migration create_enfermedad_base_table --create=enfermedad_base
+php artisan make:migration create_hospital_table --create=hospital
+php artisan make:migration create_rol_table --create=rol
+php artisan make:migration create_usuario_table --create=usuario
+php artisan make:migration create_medico_table --create=medico
+php artisan make:migration create_orden_table --create=orden
+php artisan make:migration create_seguimiento_table --create=seguimiento
+php artisan make:migration create_medicamento_table --create=medicamento
+php artisan make:migration create_receta_medica_table --create=receta_medica
+php artisan make:migration create_sintoma_table --create=sintoma
+php artisan make:migration create_detalle_sintoma_table --create=detalle_sintoma
+php artisan make:migration create_orden_revision_table --create=orden_revision
+php artisan make:migration create_resultado_table --create=resultado
+
+//Comando Modelos
+php artisan make:model Zona
+php artisan make:model Paciente
+php artisan make:model EnfermedadBase
+php artisan make:model Hospital
+php artisan make:model Rol
+php artisan make:model Medico
+php artisan make:model Orden
+php artisan make:model Seguimiento
+php artisan make:model Medicamento
+php artisan make:model RecetaMedica
+php artisan make:model Sintoma
+php artisan make:model DetalleSintoma
+php artisan make:model OrdenRevision
+php artisan make:model Resultado
+
+//Comando Controladores
+php artisan make:controller PacienteController
+php artisan make:controller ZonaController
+php artisan make:controller HospitalController
+php artisan make:controller RolController
+php artisan make:controller UsuarioController
+php artisan make:controller OrdenController
+php artisan make:controller SeguimientoController
+php artisan make:controller MedicamentoController
+php artisan make:controller SintomaController
+php artisan make:controller OrdenRevisionController
+php artisan make:controller ResultadoController
+
+php artisan make:controller Api\ApiController
+
+//Gestionar roles de Usuarios
+php artisan make:middleware Administrador
+php artisan make:middleware Medico
+
+//MySql Maria DB
+create database db_covid19
+
+//Script de migraciones
+Schema::create('zona', function (Blueprint $table) {
+    $table->id();
+    $table->string('ciudad',50);
+    $table->string('nombre_prov',50);
+    $table->string('nombre_mun',50);
+});
+
+Schema::create('paciente', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('id_zona');
+    $table->string('nombre',60);
+    $table->char('sexo',1);
+    $table->string('ci',10);
+    $table->string('telefono',40)->nullable();
+    $table->date('fecha_nacimiento');
+    $table->string('localidad',40);
+    $table->string('direccion',80)->nullable();
+    $table->string('estado',20);
+    $table->foreign('id_zona')->references('id')->on('zona');
+});
+
+Schema::create('enfermedad_base', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('id_paciente');
+    $table->string('nombre_enf',50);
+    $table->string('observacion',80)->nullable();
+    $table->foreign('id_paciente')->references('id')->on('paciente');
+});
+
+Schema::create('hospital', function (Blueprint $table) {
+    $table->id();
+    $table->string('nombre',50);
+    $table->string('telefono',40);
+    $table->string('localidad',40)->nullable();
+    $table->string('direccion',80);
+});
+
+Schema::create('rol', function (Blueprint $table) {
+    $table->id();
+    $table->string('nombre', 30);
+    $table->string('descripcion', 80);
+});
+
+Schema::create('usuario', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('id_rol');
+    $table->string('nomb_usuario',20)->unique();
+    $table->string('password',64);
+    $table->string('estado',20);
+    $table->foreign('id_rol')->references('id')->on('rol');
+});
+
+Schema::create('medico', function (Blueprint $table) {
+    $table->unsignedBigInteger('id');
+    $table->string('nombre',60);
+    $table->string('ci',10);
+    $table->string('telefono',10)->nullable();
+    $table->string('especialidad',80)->nullable();
+    $table->string('turno',20);
+    $table->foreign('id')->references('id')->on('usuario')->onDelete('cascade');
+});
+
+Schema::create('orden', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('id_paciente');
+    $table->foreignId('id_usuario');
+    $table->foreignId('id_hospital')->nullable();
+    $table->dateTime('fecha_ingreso');
+    $table->dateTime('fecha_salida')->nullable();
+    $table->string('tipo_orden',40);
+    $table->string('tipo_salida',40)->nullable();
+    $table->foreign('id_paciente')->references('id')->on('paciente');
+    $table->foreign('id_usuario')->references('id')->on('usuario');
+    $table->foreign('id_hospital')->references('id')->on('hospital');            
+});
+
+Schema::create('seguimiento', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('id_orden');
+    $table->foreignId('id_medico');
+    $table->smallInteger('fase');
+    $table->string('observacion',80)->nullable();
+    $table->foreign('id_orden')->references('id')->on('orden');
+    $table->foreign('id_medico')->references('id')->on('medico');
+});
+
+Schema::create('medicamento', function (Blueprint $table) {
+    $table->id();            
+    $table->string('descripcion',100)->nullable();
+    $table->string('tipo_medic',70)->nullable();
+});
+
+Schema::create('receta_medica', function (Blueprint $table) {
+    $table->foreignId('id_seguimiento');
+    $table->bigInteger('id_receta');
+    $table->dateTime('fecha_recet');
+    $table->string('indicacion',100)->nullable();
+    $table->string('observacion',80)->nullable();
+    $table->foreignId('id_medicamento');
+    $table->primary(['id_seguimiento', 'id_receta']);
+    $table->foreign('id_seguimiento')->references('id')->on('seguimiento');
+    $table->foreign('id_medicamento')->references('id')->on('medicamento');
+});
+
+Schema::create('sintoma', function (Blueprint $table) {
+    $table->id();
+    $table->string('nombre',50);
+    $table->string('nivel',40);
+});
+
+Schema::create('detalle_sintoma', function (Blueprint $table) {
+    $table->foreignId('id_seguimiento');
+    $table->foreignId('id_sintoma');
+    $table->dateTime('fecha_sint');
+    $table->primary(['id_seguimiento', 'id_sintoma']);
+    $table->foreign('id_seguimiento')->references('id')->on('seguimiento');
+    $table->foreign('id_sintoma')->references('id')->on('sintoma');
+});
+
+Schema::create('orden_revision', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('id_paciente');
+    $table->foreignId('id_medico');
+    $table->date('fecha_revision');
+    $table->string('descripcion',80)->nullable();
+    $table->foreign('id_paciente')->references('id')->on('paciente');
+    $table->foreign('id_medico')->references('id')->on('medico');
+});
+
+Schema::create('resultado', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('id_revision');
+    $table->string('nombre_result',50);
+    $table->dateTime('fecha_hr');
+    $table->string('resultado',20);
+    $table->foreign('id_revision')->references('id')->on('orden_revision');
+});
