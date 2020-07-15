@@ -1,4 +1,5 @@
 <template>
+<div id="navegacion">
     	<nav class="navbar navbar-expand-lg navbar-light bg-light row">
 			<div class="Derecha" wfd-id="152">
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" wfd-id="190">☰</button>
@@ -11,6 +12,7 @@
 			</ul>
 		 	</div>
 		</nav>
+</div>
 </template>
 <script>
 export default {
@@ -26,6 +28,26 @@ export default {
 					url:'medida',
 					nombre:'Medias de Seguridad',
 					id:'149'
+				},
+				{
+					url:'paciente',
+					nombre:'Pacientes en Casa',
+					id:'148'
+				},
+				{
+					url:'noticia',
+					nombre:'Noticias',
+					id:'147'
+				},
+				{
+					url:'covid',
+					nombre:'¿Que es el COVID-19?',
+					id:'146'
+				},
+				{
+					url:'acercade',
+					nombre:'Acerca de COVID-19 SCZ',
+					id:'145'
 				},
 				
 			]

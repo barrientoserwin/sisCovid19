@@ -55,9 +55,11 @@
                   ¿Qué hacer con un paciente de Covid-19 en casa? - Cuidados y recomendaciones para los pacientes aislados en casa
                 </p>
                 <p class="text-right">
-                  <a href="https://www.boliviasegura.gob.bo/paciente-en-casa.php">
+                  <router-link to="paciente">
+                  <a href="#">
                     <button type="button" class="btn btn-success" wfd-id="165">Más información</button>
                   </a>
+                  </router-link>
                 </p>
               </div>
             </div>
@@ -270,13 +272,15 @@
               </a>
             </li>
           </ul>
-          <div class="card-body" wfd-id="12">
+          <div class="card-body" wfd-id="53">
             <p class="text-right">
-              <a href="https://www.boliviasegura.gob.bo/noticias.php">
-                <button type="button" class="btn btn-success" wfd-id="160">Más noticias</button>
-              </a>
-            </p>
-          </div>
+            <router-link to="noticia">
+            <a href="#navegacion">
+              <button type="button" class="btn btn-sm btn-success" wfd-id="87">Mas Noticias</button>
+            </a>
+          </router-link>
+        </p>
+      </div>
         </div>
       </div>
     </div>

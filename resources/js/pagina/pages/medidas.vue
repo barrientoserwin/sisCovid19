@@ -144,9 +144,9 @@
 
       <div class="card-body" wfd-id="53">
         <p class="text-right">
-          <a href="http://127.0.0.1:8000/#/inicio">
+          <router-link to="inicio" href="#">
             <button type="button" class="btn btn-sm btn-success" wfd-id="87">Volver al inicio</button>
-          </a>
+          </router-link>
         </p>
       </div>
     </div>

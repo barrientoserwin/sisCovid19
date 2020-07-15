@@ -37,4 +37,5 @@ styles(['resources/lib/pagina/css/style.css',
  'public/css/lib.css')
  .scripts([
     'resources/lib/pagina/js/pagina.js',
+    'resources/lib/pagina/js/jquery-latest.js',
 ], 'public/js/lib.js')
